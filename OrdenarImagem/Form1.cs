@@ -57,23 +57,28 @@ namespace OrdenarImagem
         private void button2_Click(object sender, EventArgs e)
         {
             Color c;
-            List<Point>[] clr;
-            Point p;
+            List<Ponto>[] clr;
+            Ponto p;
             int x, y;
             int idx, j;
+            int maxidx = 0;
 
             /*long l1, l2, l3;
             int x1, y1, z1;
             int x2, y2, z2;
             long perim;*/
-            clr = new List<Point>[16777216];
+            clr = new List<Ponto>[16777216];
             for (x = 0; x < bmp.Width; x++)
             {
                 for (y = 0; y < bmp.Height; y++)
                 {
+                    Cores c1 = new Cores();
                     c = bmp.GetPixel(x, y);
-                    p = new Point(x, y);
-                    idx = c.B + c.G * 256 + c.R * 256 * 256;
+                    p = new Ponto(x, y, c);
+                    //idx = c.B + c.G * 256 + c.R * 256 * 256;
+                    c1.setCor(c);
+                    idx = (int)c1.cinza;
+                    if (idx > maxidx) maxidx = idx;
                     // idx = (int)Math.Sqrt(c.B * c.B + c.G * c.G + c.R * c.R);
                     /*x1 = c.B; y1 = 0;   z1 = 0;
                     x2 = 0;   y2 = c.G; z2 = 0;
@@ -92,7 +97,7 @@ namespace OrdenarImagem
                     //idx = ( c.R + c.G + c.B ) / 3;
                     if (clr[idx] == null)
                     {
-                        clr[idx] = new List<Point>();
+                        clr[idx] = new List<Ponto>();
                     }
                     clr[idx].Add(p);
                     c = Color.FromArgb(255 - c.R, 255 - c.G, 255 - c.B);
@@ -104,15 +109,16 @@ namespace OrdenarImagem
             //pictureBox1.Image = bmp;
             x = 0;
             y = 0;
-            progressBar1.Maximum = 16777216;
+            progressBar1.Maximum = maxidx+1;
             progressBar1.Value = 0;
-            for (idx = 0; idx < 16777216; idx++)
+            for (idx = 0; idx < maxidx+1; idx++)
             {
                 if (clr[idx] != null)
                 {
-                    c = Color.FromArgb(idx);
+                    //c = Color.FromArgb(idx);
                     for (j = 0; j < clr[idx].Count; j++)
                     {
+                        c = clr[idx][j].C;
                         bmp.SetPixel(x, y, Color.FromArgb(c.R, c.G, c.B));
                         x++;
                         if (x >= bmp.Width)
