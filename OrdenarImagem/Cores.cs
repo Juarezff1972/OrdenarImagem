@@ -228,8 +228,9 @@ namespace OrdenarImagem
 
             gama = 1.0; // '2.2
 
-            lY = 0.2126 * linR + 0.7152 * linG + 0.0722 * linB;
-            l = lY * 65535 * Math.Pow(lY, (1 / gama));  //'116 * lY ^ (1 / 3) //' - 16
+            //lY = 0.2126 * linR + 0.7152 * linG + 0.0722 * linB;
+            lY = 0.3 * linR + 0.59 * linG + 0.11 * linB;
+            l = lY * 1048576 * Math.Pow(lY, (1 / gama));  //'116 * lY ^ (1 / 3) //' - 16
 
             cinza = l;
         }
