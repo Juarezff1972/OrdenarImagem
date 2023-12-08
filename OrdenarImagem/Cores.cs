@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OrdenarImagem
 {
@@ -228,9 +224,11 @@ namespace OrdenarImagem
 
             gama = 1.0; // '2.2
 
-            //lY = 0.2126 * linR + 0.7152 * linG + 0.0722 * linB;
-            lY = 0.3 * linR + 0.59 * linG + 0.11 * linB;
-            l = lY * 1048576 * Math.Pow(lY, (1 / gama));  //'116 * lY ^ (1 / 3) //' - 16
+            lY = 0.2126 * linR + 0.7152 * linG + 0.0722 * linB;
+            //lY = 0.3 * linR + 0.59 * linG + 0.11 * linB;
+            //l = lY * 1048576 * Math.Pow(lY, (1 / gama));  //'116 * lY ^ (1 / 3) //' - 16
+            l = lY * 100000;
+            //Console.WriteLine(r.ToString() + "," + g.ToString() + "," + b.ToString() + " - " + l.ToString());
 
             cinza = l;
         }
@@ -241,85 +239,3 @@ namespace OrdenarImagem
         }
     }
 }
-
-/*
- 
-
-
-void ArrayItem::setCor(Color cor)
-{
-	float nRPct;
-	float nGPct;
-	float nBPct;
-	float linR;
-	float linG;
-	float linB;
-	float lY;
-	float l;
-	float gama;
-	rgb color;
-	//hsv colorhsv;
-	int r;
-	int g;
-	int b;
-
-	corLong = cor.B + cor.G * 256 + cor.R * 256 * 256;
-
-	//color = 
-	RGB.R = cor.R;// cor % 256;
-	RGB.G = cor.G;// (cor / 256) % 256;
-	RGB.B = cor.B;// cor / 256 / 256;
-
-
-	r = RGB.R;
-	g = RGB.G;
-	b = RGB.B;
-
-	//=0,299*I1+0,587*J1+0,114*K1
-	nRPct = r;// (0.299 * r);
-	nGPct = g;// (0.587 * g);
-	nBPct = b;// (0.114 * b);
-	cinza2 = (int)roundf((nRPct + nGPct + nBPct) / 3);
-
-	nRPct = r / 255.0;
-	nGPct = g / 255.0;
-	nBPct = b / 255.0;
-
-
-	rgb2hsv();
-
-
-	if (nRPct <= 0.04045)
-	{
-		linR = nRPct / 12.92;
-	}
-	else
-	{
-		linR = pow(((nRPct + 0.055) / 1.055), 2.4);
-	}
-	if (nGPct <= 0.04045)
-	{
-		linG = nGPct / 12.92;
-	}
-	else
-	{
-		linG = pow(((nGPct + 0.055) / 1.055), 2.4);
-	}
-	if (nBPct <= 0.04045)
-	{
-		linB = nBPct / 12.92;
-	}
-	else
-	{
-		linB = pow(((nBPct + 0.055) / 1.055), 2.4);
-	}
-
-	gama = 1.0; // '2.2
-
-	lY = 0.2126 * linR + 0.7152 * linG + 0.0722 * linB;
-	l = lY * 65535 * pow(lY, (1 / gama));  //'116 * lY ^ (1 / 3) //' - 16
-
-	cinza = l;
-}
- 
- */

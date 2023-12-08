@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 
 namespace OrdenarImagem
 {
+    public delegate void EscritaEventHandler(object sender, EventArgs e);
+
     public partial class Form1 : Form
     {
         private Image img;
@@ -17,10 +15,28 @@ namespace OrdenarImagem
         private Graphics graph;
         private float ratio;
 
+        private string arq;
+
         public Form1()
         {
             InitializeComponent();
             ratio = 1;
+
+            /*Cores teste= new Cores();
+            Color tst;
+            int r, g, b;
+            for (b=0;b<256;b++)
+            {
+                for(g=0;g<256;g++)
+                {
+                    for(r=0;r<256;r++)
+                    {
+                        tst=Color.FromArgb(r,g,b);
+                        teste.setCor(tst);
+
+                    }
+                }
+            }*/
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -28,21 +44,29 @@ namespace OrdenarImagem
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 //bmp = new Bitmap(openFileDialog1.FileName);
+                arq = openFileDialog1.FileName;
+                Bitmap orig = new Bitmap(arq);
 
-                Bitmap orig = new Bitmap(openFileDialog1.FileName);
-                bmp = new Bitmap(orig.Width, orig.Height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+                float factor = (float)orig.Width / 320;
+
+                bmp = new Bitmap((int)(orig.Width / factor), (int)(orig.Height / factor), System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
 
                 using (Graphics gr = Graphics.FromImage(bmp))
                 {
+                    gr.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
                     gr.DrawImage(orig, new Rectangle(0, 0, bmp.Width, bmp.Height));
                 }
 
                 ratio = (float)bmp.Width / (float)bmp.Height;
 
+                Form1.ActiveForm.Text = bmp.Width.ToString() + " x " + bmp.Height.ToString() + " [" + ratio.ToString() + " - " + factor.ToString() + "]";
+
                 pictureBox1.Image = bmp;
                 pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
                 pictureBox1.Width = (int)(pictureBox1.Height * ratio);
                 button2.Enabled = true;
+                button3.Enabled = true;
+                button4.Enabled = true;
                 orig.Dispose();
             }
 
@@ -62,6 +86,8 @@ namespace OrdenarImagem
             int x, y;
             int idx, j;
             int maxidx = 0;
+            //int maxcount = 0;
+            string t;
 
             /*long l1, l2, l3;
             int x1, y1, z1;
@@ -89,9 +115,7 @@ namespace OrdenarImagem
                     x1 = 0;   y1 = 0; z1 = c.R;
                     x2 = c.B; y2 = 0; z2 = 0;
                     l3 = (long)Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) + (z2 - z1) * (x2 - z1));
-
-                    perim = (l1 + l2 + l3);
-                    idx = (int)Math.Sqrt(perim * (perim - l1) * (perim - l2) * (perim - l3));*/
+*/
 
 
                     //idx = ( c.R + c.G + c.B ) / 3;
@@ -100,18 +124,21 @@ namespace OrdenarImagem
                         clr[idx] = new List<Ponto>();
                     }
                     clr[idx].Add(p);
-                    c = Color.FromArgb(255 - c.R, 255 - c.G, 255 - c.B);
-                    bmp.SetPixel( x, y, c );
+                    //if (clr[idx].Count> maxcount) maxcount = clr[idx].Count;
+                    //c = Color.FromArgb(255 - c.R, 255 - c.G, 255 - c.B);
+                    c = Color.FromArgb(c1.cinza2, c1.cinza2, c1.cinza2);
+                    bmp.SetPixel(x, y, c);
                 }
                 Application.DoEvents();
                 pictureBox1.Refresh();
             }
+
             //pictureBox1.Image = bmp;
             x = 0;
             y = 0;
-            progressBar1.Maximum = maxidx+1;
+            progressBar1.Maximum = maxidx + 1;
             progressBar1.Value = 0;
-            for (idx = 0; idx < maxidx+1; idx++)
+            for (idx = 0; idx < maxidx + 1; idx++)
             {
                 if (clr[idx] != null)
                 {
@@ -268,6 +295,40 @@ namespace OrdenarImagem
                 //pictureBox1.Refresh();
             }
             pictureBox1.Refresh();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            int x, y;
+            Color c;
+            Bitmap bmp1;
+            progressBar1.Maximum = bmp.Width;
+            progressBar1.Value = 0;
+            bmp1 = new Bitmap(bmp.Width, bmp.Height);
+
+            for (x = 0; x < bmp.Width; x++)
+            {
+                for (y = 0; y < bmp.Height; y++)
+                {
+                    c = bmp.GetPixel(x, y);
+                    c = Color.FromArgb(255 - c.R, 255 - c.G, 255 - c.B);
+                    bmp.SetPixel(x, y, c);
+                }
+                pictureBox1.Image = bmp;
+                progressBar1.Value = x;
+                pictureBox1.Refresh();
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            string f = arq;
+            string[] p = f.Split('\\');
+            f = p[p.Length - 1];
+            p = f.Split('.');
+            f = p[0];
+            f += "_new.jpg";
+            pictureBox1.Image.Save(f, ImageFormat.Jpeg);
         }
     }
 }
