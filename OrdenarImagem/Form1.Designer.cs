@@ -110,7 +110,8 @@
             // 
             progressBar1.Location = new Point(11, 431);
             progressBar1.Name = "progressBar1";
-            progressBar1.Size = new Size(324, 22);
+            progressBar1.Size = new Size(641, 22);
+            progressBar1.Style = ProgressBarStyle.Continuous;
             progressBar1.TabIndex = 35;
             // 
             // timer1

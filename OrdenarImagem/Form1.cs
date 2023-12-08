@@ -392,18 +392,29 @@ namespace OrdenarImagem
         private void timer1_Tick(object sender, EventArgs e)
         {
             int i;
+            int segmentos;
             Color c;
             Point p;
 
             if (vetor != null)
             {
+                segmentos = 0;
+                progressBar1.Maximum = vetor.Length;
                 lockBitmap2.LockBits();
                 for (i = 0; i < vetor.Length; i++)
                 {
+                    if (i<vetor.Length-1)
+                    {
+                        if (vetor[i + 1].Valor < vetor[i].Valor)
+                        {
+                            segmentos++;
+                        }
+                    }
                     p = idx2pt(vetor[i].Indice);
                     c = vetor[i].Cor;
                     lockBitmap2.SetPixel(p.X, p.Y, c);
                 }
+                progressBar1.Value = vetor.Length - segmentos - 1;
                 pictureBox1.Image = bmp2;
                 lockBitmap2.UnlockBits();
             }
