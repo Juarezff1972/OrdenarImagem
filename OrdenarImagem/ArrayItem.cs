@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace OrdenarImagem
 {
@@ -7,13 +11,27 @@ namespace OrdenarImagem
         private int v;
         private int indice;
         private bool mudou;
+        private Color c;
 
         public ArrayItem()
         {
             mudou = true;
         }
 
-        public event EscritaEventHandler Escreveu;
+        //public event EscritaEventHandler? Escreveu;
+        //public event MudarEventHandler Mudar;
+
+        public Color Cor
+        {
+            get
+            {
+                return c;
+            }
+            set
+            {
+                c = value;
+            }
+        }
 
         public int Indice
         {
@@ -36,16 +54,20 @@ namespace OrdenarImagem
             set
             {
                 v = value;
-                //OnEscreveu(new EventArgs());
-                Dispara(new EventArgs());
+                //Dispara(new EventArgs());
+
                 Mudou = true;
             }
         }
-
-        public void Dispara(EventArgs e)
+        /*public void Dispara(EventArgs e)
         {
             Escreveu?.Invoke(this, e);
-        }
+        }*/
+
+        /*public void DisparaMudar(VetorEventArgs e)
+        {
+            Mudar?.Invoke(this, e);
+        }*/
 
         public bool Mudou
         {
@@ -56,13 +78,25 @@ namespace OrdenarImagem
             set
             {
                 mudou = value;
+                if (mudou)
+                {
+                    //Debug.WriteLine("Mudou - Indice: " + Indice.ToString());
+                    /*VetorEventArgs e = new()
+                    {
+                        indice = Indice,
+                        valor = Valor,
+                        cor= Cor
+                    };
+
+                    DisparaMudar(e);*/
+                }
             }
         }
 
-        public int CompareTo(Object v1)
+        public int CompareTo(Object? v1)
         {
             int ret;
-            ArrayItem a = (ArrayItem)v1;
+            ArrayItem? a = (ArrayItem?)v1;
             ret = 0;
 
             if (a != null)

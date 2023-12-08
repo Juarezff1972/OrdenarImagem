@@ -1,334 +1,413 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
+using System.Diagnostics;
+using System.Runtime.Intrinsics.X86;
 using System.Windows.Forms;
 
 namespace OrdenarImagem
 {
-    public delegate void EscritaEventHandler(object sender, EventArgs e);
+    //public delegate void EscritaEventHandler(object sender, EventArgs e);
+    //public delegate void MudarEventHandler(object sender, VetorEventArgs e);
 
     public partial class Form1 : Form
     {
-        private Image img;
-        private Bitmap bmp;
-        private Graphics graph;
-        private float ratio;
+        const string BINARYINSERTIONSORT = "BinaryInsertionSort";
+        const string BITONICSORT = "BitonicSort";
+        const string BUBBLESORT = "BubbleSort";
+        const string BUBBLESORT2 = "BubbleSort2";
+        const string BUBBLESORT3 = "BubbleSort3";
+        const string COCKTAILSHAKERSORT = "CocktailShakerSort";
+        const string COMBSORT = "CombSort";
+        const string COUNTINGSORT = "CountingSort";
+        const string CYCLESORT = "CycleSort";
+        const string FLASHSORT = "FlashSort";
+        const string GNOMESORT = "GnomeSort";
+        const string HEAPSORT = "HeapSort";
+        const string INSERTSORT = "InsertSort";
+        const string INSERTSORT2 = "InsertSort2";
+        const string MERGESORT = "MergeSort";
+        const string ODDEVENSORT = "OddEvenSort";
+        const string PANCAKESORT = "PancakeSort";
+        const string PIGEONHOLESORT = "PigeonHoleSort";
+        const string QUICKSORTDUALPIVOT = "QuickSortDualPivot";
+        const string QUICKSORTLL = "QuickSortLL";
+        const string QUICKSORTLR = "QuickSortLR";
+        const string QUICKSORTTERNARYLR = "QuickSortTernaryLR";
+        const string RADIXSORTLSD = "RadixSortLSD";
+        const string RADIXSORTMSD = "RadixSortMSD";
+        const string SELECTIONSORT = "SelectionSort";
+        const string SHELLSORT = "ShellSort";
+        const string SLOWSORT = "SlowSort";
+        const string AMERICANSORT = "AmericanFlagSort";
+        const string SANDPAPERSORT = "SandpaperSort";
+        const string DIAMONDSORT = "DiamondSort";
 
-        private string arq;
+        private int[]? m_array;
+        private ArrayItem[]? vetor;
+        private Bitmap bmp2;
+        LockBitmap lockBitmap2;
 
         public Form1()
         {
             InitializeComponent();
-            ratio = 1;
+        }
 
-            /*Cores teste= new Cores();
-            Color tst;
-            int r, g, b;
-            for (b=0;b<256;b++)
-            {
-                for(g=0;g<256;g++)
-                {
-                    for(r=0;r<256;r++)
-                    {
-                        tst=Color.FromArgb(r,g,b);
-                        teste.setCor(tst);
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            this.comboBox1.Items.Clear();
+            this.comboBox1.Items.Add(BINARYINSERTIONSORT);
+            this.comboBox1.Items.Add(BITONICSORT);
+            this.comboBox1.Items.Add(BUBBLESORT);
+            this.comboBox1.Items.Add(BUBBLESORT2);
+            this.comboBox1.Items.Add(BUBBLESORT3);
+            this.comboBox1.Items.Add(COCKTAILSHAKERSORT);
+            this.comboBox1.Items.Add(COMBSORT);
+            this.comboBox1.Items.Add(COUNTINGSORT);
+            this.comboBox1.Items.Add(CYCLESORT);
+            this.comboBox1.Items.Add(FLASHSORT);
+            this.comboBox1.Items.Add(GNOMESORT);
+            this.comboBox1.Items.Add(HEAPSORT);
+            this.comboBox1.Items.Add(INSERTSORT);
+            this.comboBox1.Items.Add(INSERTSORT2);
+            this.comboBox1.Items.Add(MERGESORT);
+            this.comboBox1.Items.Add(ODDEVENSORT);
+            this.comboBox1.Items.Add(PANCAKESORT);
+            this.comboBox1.Items.Add(PIGEONHOLESORT);
+            this.comboBox1.Items.Add(QUICKSORTDUALPIVOT);
+            this.comboBox1.Items.Add(QUICKSORTLL);
+            this.comboBox1.Items.Add(QUICKSORTLR);
+            this.comboBox1.Items.Add(QUICKSORTTERNARYLR);
+            this.comboBox1.Items.Add(RADIXSORTLSD);
+            this.comboBox1.Items.Add(RADIXSORTMSD);
+            this.comboBox1.Items.Add(SELECTIONSORT);
+            this.comboBox1.Items.Add(SHELLSORT);
+            this.comboBox1.Items.Add(SLOWSORT);
+            this.comboBox1.Items.Add(AMERICANSORT);
+            this.comboBox1.Items.Add(SANDPAPERSORT);
+            this.comboBox1.Items.Add(DIAMONDSORT);
+            this.comboBox1.Sorted = true;
 
-                    }
-                }
-            }*/
+            this.FormBorderStyle = FormBorderStyle.Sizable;
+            Resetar();
+
+            comboBox1.SelectedIndex = 0;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            string? x;
+            Algoritmos algo;
+
+            x = comboBox1.SelectedItem.ToString();
+            algo = new Algoritmos(vetor);
+            //algo.SetVetor(vetor);
+            algo.SetQuickSortPivot(qsPivotSel1.Text);
+
+            button1.Enabled = false;
+            button2.Enabled = false;
+
+            //var watch = new System.Diagnostics.Stopwatch();
+            this.UseWaitCursor = true;
+            this.Cursor = Cursors.WaitCursor;
+
+            //watch.Start();
+            timer1.Interval = 100;
+            timer1.Enabled = true;
+            timer1.Start();
+
+            Form1.ActiveForm.Text = x;
+            switch (x)
             {
-                //bmp = new Bitmap(openFileDialog1.FileName);
-                arq = openFileDialog1.FileName;
-                Bitmap orig = new Bitmap(arq);
+                case INSERTSORT:
+                    algo.InsertSort();
+                    break;
 
-                float factor = (float)orig.Width / 320;
+                case SELECTIONSORT:
+                    algo.SelectionSort();
+                    break;
 
-                bmp = new Bitmap((int)(orig.Width / factor), (int)(orig.Height / factor), System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+                case INSERTSORT2:
+                    algo.InsertSort2();
+                    break;
 
-                using (Graphics gr = Graphics.FromImage(bmp))
-                {
-                    gr.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                    gr.DrawImage(orig, new Rectangle(0, 0, bmp.Width, bmp.Height));
-                }
+                case BINARYINSERTIONSORT:
+                    algo.BinaryInsertionSort();
+                    break;
 
-                ratio = (float)bmp.Width / (float)bmp.Height;
+                case MERGESORT:
+                    algo.MergeSort();
+                    break;
 
-                Form1.ActiveForm.Text = bmp.Width.ToString() + " x " + bmp.Height.ToString() + " [" + ratio.ToString() + " - " + factor.ToString() + "]";
+                case BUBBLESORT:
+                    algo.BubbleSort();
+                    break;
 
-                pictureBox1.Image = bmp;
-                pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-                pictureBox1.Width = (int)(pictureBox1.Height * ratio);
-                button2.Enabled = true;
-                button3.Enabled = true;
-                button4.Enabled = true;
-                orig.Dispose();
+                case BUBBLESORT2:
+                    algo.BubbleSort2();
+                    break;
+
+                case BUBBLESORT3:
+                    algo.BubbleSort3();
+                    break;
+
+                case COCKTAILSHAKERSORT:
+                    algo.CocktailShakerSort();
+                    break;
+
+                case GNOMESORT:
+                    algo.GnomeSort();
+                    break;
+
+                case COMBSORT:
+                    algo.CombSort();
+                    break;
+
+                case ODDEVENSORT:
+                    algo.OddEvenSort();
+                    break;
+
+                case SHELLSORT:
+                    algo.ShellSort();
+                    break;
+
+                case QUICKSORTLR:
+                    algo.QuickSortLR();
+                    break;
+
+                case QUICKSORTLL:
+                    algo.QuickSortLL();
+                    break;
+
+                case QUICKSORTTERNARYLR:
+                    algo.QuickSortTernaryLR();
+                    break;
+
+                case QUICKSORTDUALPIVOT:
+                    algo.QuickSortDualPivot();
+                    break;
+
+                case HEAPSORT:
+                    algo.HeapSort();
+                    break;
+
+                case RADIXSORTMSD:
+                    algo.RadixSortMSD();
+                    break;
+
+                case RADIXSORTLSD:
+                    algo.RadixSortLSD();
+                    break;
+
+                case COUNTINGSORT:
+                    algo.CountingSort();
+                    break;
+
+                case BITONICSORT:
+                    algo.BitonicSort();
+                    break;
+
+                case SLOWSORT:
+                    algo.SlowSort();
+                    break;
+
+                case CYCLESORT:
+                    algo.CycleSort();
+                    break;
+
+                case PANCAKESORT:
+                    algo.PancakeSort();
+                    break;
+
+                case FLASHSORT:
+                    algo.FlashSort();
+                    break;
+
+                case PIGEONHOLESORT:
+                    algo.pigeonholeSort();
+                    break;
+
+                case AMERICANSORT:
+                    algo.AmericanSort();
+                    break;
+
+                case SANDPAPERSORT:
+                    algo.SandpaperSort();
+                    break;
+
+                case DIAMONDSORT:
+                    algo.DiamondSort();
+                    break;
+
+                default:
+                    break;
             }
+            //watch.Stop();
 
-        }
+            this.Cursor = Cursors.Default;
+            this.UseWaitCursor = false;
 
-        private void Form1_Resize(object sender, EventArgs e)
-        {
-
-            pictureBox1.Width = (int)(pictureBox1.Height * ratio);
+            button1.Enabled = true;
+            button2.Enabled = true;
+            timer1.Stop();
+            timer1.Enabled = false;
+            timer1_Tick(new object(),new EventArgs());
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Color c;
-            List<Ponto>[] clr;
-            Ponto p;
-            int x, y;
-            int idx, j;
-            int maxidx = 0;
-            //int maxcount = 0;
-            string t;
-
-            /*long l1, l2, l3;
-            int x1, y1, z1;
-            int x2, y2, z2;
-            long perim;*/
-            clr = new List<Ponto>[16777216];
-            for (x = 0; x < bmp.Width; x++)
-            {
-                for (y = 0; y < bmp.Height; y++)
-                {
-                    Cores c1 = new Cores();
-                    c = bmp.GetPixel(x, y);
-                    p = new Ponto(x, y, c);
-                    //idx = c.B + c.G * 256 + c.R * 256 * 256;
-                    c1.setCor(c);
-                    idx = (int)c1.cinza;
-                    if (idx > maxidx) maxidx = idx;
-                    // idx = (int)Math.Sqrt(c.B * c.B + c.G * c.G + c.R * c.R);
-                    /*x1 = c.B; y1 = 0;   z1 = 0;
-                    x2 = 0;   y2 = c.G; z2 = 0;
-                    l1 = (long)Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) + (z2 - z1) * (x2 - z1));
-                    x1 = 0; y1 = c.G; z1 = 0;
-                    x2 = 0; y2 = 0;   z2 = c.R;
-                    l2 = (long)Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) + (z2 - z1) * (x2 - z1));
-                    x1 = 0;   y1 = 0; z1 = c.R;
-                    x2 = c.B; y2 = 0; z2 = 0;
-                    l3 = (long)Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) + (z2 - z1) * (x2 - z1));
-*/
-
-
-                    //idx = ( c.R + c.G + c.B ) / 3;
-                    if (clr[idx] == null)
-                    {
-                        clr[idx] = new List<Ponto>();
-                    }
-                    clr[idx].Add(p);
-                    //if (clr[idx].Count> maxcount) maxcount = clr[idx].Count;
-                    //c = Color.FromArgb(255 - c.R, 255 - c.G, 255 - c.B);
-                    c = Color.FromArgb(c1.cinza2, c1.cinza2, c1.cinza2);
-                    bmp.SetPixel(x, y, c);
-                }
-                Application.DoEvents();
-                pictureBox1.Refresh();
-            }
-
-            //pictureBox1.Image = bmp;
-            x = 0;
-            y = 0;
-            progressBar1.Maximum = maxidx + 1;
-            progressBar1.Value = 0;
-            for (idx = 0; idx < maxidx + 1; idx++)
-            {
-                if (clr[idx] != null)
-                {
-                    //c = Color.FromArgb(idx);
-                    for (j = 0; j < clr[idx].Count; j++)
-                    {
-                        c = clr[idx][j].C;
-                        bmp.SetPixel(x, y, Color.FromArgb(c.R, c.G, c.B));
-                        x++;
-                        if (x >= bmp.Width)
-                        {
-                            x = 0;
-                            y++;
-                        }
-                    }
-                }
-                Application.DoEvents();
-
-                if (idx % 2048 == 0)
-                {
-                    pictureBox1.Image = bmp;
-                    pictureBox1.Refresh();
-                }
-
-                //pictureBox1.Refresh();
-                progressBar1.Value = idx;
-            }
-            pictureBox1.Image = bmp;
-            pictureBox1.Refresh();
+            Resetar();
         }
 
-        private Color aplicaFiltro(int x, int y, sbyte[,] filtro1, sbyte[,] filtro2, Bitmap bmp1)
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int i, j;
-            int k, l;
-            int r1, g1, b1;
-            int r2, g2, b2;
-            double r, g, b;
-
-            sbyte f1;
-            sbyte f2;
-
-            Color c1;
-            r1 = 0;
-            g1 = 0;
-            b1 = 0;
-            r2 = 0;
-            g2 = 0;
-            b2 = 0;
-
-            //t = 0;
-            for (i = -1; i < 2; i++)
+            string? x;
+            x = comboBox1.SelectedItem.ToString();
+            qsPivotSel1.Visible = false;
+            if (x != null)
             {
-                for (j = -1; j < 2; j++)
+                if (x.StartsWith("Quick"))
                 {
-                    k = x + i;
-                    l = y + j;
-                    if ((k < 0) || (l < 0) || (k >= bmp.Width) || (l >= bmp.Height))
-                    {
-                        c1 = Color.FromArgb(0, 0, 0);
-                    }
-                    else
-                    {
-                        c1 = bmp1.GetPixel(k, l);
-                    }
-                    f1 = filtro1[i + 1, j + 1];
-                    f2 = filtro2[i + 1, j + 1];
-
-                    r1 += (c1.R * f1);// / 4;
-                    g1 += (c1.G * f1);// / 4;
-                    b1 += (c1.B * f1);// / 4;
-                    r2 += (c1.R * f2);// / 4;
-                    g2 += (c1.G * f2);// / 4;
-                    b2 += (c1.B * f2);// / 4;
-
+                    qsPivotSel1.Visible = true;
+                    qsPivotSel1.SelectedIndex = 0;
                 }
             }
-
-            r = Math.Sqrt(r1 * r1 + r2 * r2);
-            g = Math.Sqrt(g1 * g1 + g2 * g2);
-            b = Math.Sqrt(b1 * b1 + b2 * b2);
-
-
-            if (r > 255)
-                r = 255;
-            if (r < 0)
-                r = 0;
-            if (g > 255)
-                g = 255;
-            if (g < 0)
-                g = 0;
-            if (b > 255)
-                b = 255;
-            if (b < 0)
-                b = 0;
-
-            c1 = Color.FromArgb((int)r, (int)g, (int)b);
-
-            return c1;
-
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        /*public virtual void OnEscreveu(object sender, EventArgs e)
         {
-            sbyte[,] filtro1;
-            sbyte[,] filtro2;
-            int x, y;
+            int i;
+            Point p;
             Color c;
-            Bitmap bmp1;
-            filtro1 = new sbyte[3, 3];
-            filtro1[0, 0] = 1;
-            filtro1[0, 1] = 0;
-            filtro1[0, 2] = -1;
-            filtro1[1, 0] = 2;
-            filtro1[1, 1] = 0;
-            filtro1[1, 2] = -2;
-            filtro1[2, 0] = 1;
-            filtro1[2, 1] = 0;
-            filtro1[2, 2] = -1;
-            filtro2 = new sbyte[3, 3];
-            filtro2[0, 0] = -1;
-            filtro2[0, 1] = -2;
-            filtro2[0, 2] = -1;
-            filtro2[1, 0] = 0;
-            filtro2[1, 1] = 0;
-            filtro2[1, 2] = 0;
-            filtro2[2, 0] = 1;
-            filtro2[2, 1] = 2;
-            filtro2[2, 2] = 1;
-            progressBar1.Maximum = bmp.Width;
-            progressBar1.Value = 0;
-            bmp1 = new Bitmap(bmp.Width, bmp.Height);
-
-            for (x = 0; x < bmp.Width; x++)
+            if (vetor != null)
             {
-                for (y = 0; y < bmp.Height; y++)
+                lockBitmap2.LockBits();
+                for (i = 0; i < vetor.Length; i++)
                 {
-                    bmp1.SetPixel(x, y, bmp.GetPixel(x, y));
+                    if (vetor[i]!=null)
+                    {
+                        p = idx2pt(vetor[i].Valor);
+                        c = vetor[i].Cor;
+                        lockBitmap2.SetPixel(p.X, p.Y, c);
+                    }
                 }
+                lockBitmap2.UnlockBits();
+                pictureBox1.Image = bmp2;
             }
+        }*/
 
-            for (x = 0; x < bmp.Width; x++)
+        /*public virtual void OnMudar(object sender, VetorEventArgs e)
+        {
+            int i;
+            Point p;
+            Color c;
+            if (vetor != null)
             {
-                for (y = 0; y < bmp.Height; y++)
-                {
-                    //c = bmp.GetPixel( x, y );
-                    c = aplicaFiltro(x, y, filtro1, filtro2, bmp1);
-                    bmp.SetPixel(x, y, c);
+                lockBitmap2.LockBits();
+                p = idx2pt(e.indice);
+                c = e.cor;
+                lockBitmap2.SetPixel(p.X, p.Y, c);
+                lockBitmap2.UnlockBits();
+                pictureBox1.Image = bmp2;
+                Application.DoEvents();
+            }
+        }*/
 
+        private Point idx2pt(int idx)
+        {
+            Point p;
+            p = new Point(0, 0);
+            int x = idx % pictureBox1.Width;
+            int y = idx / pictureBox1.Width;
+            p.X = x;
+            p.Y = y;
+            return p;
+        }
+
+        private void Resetar()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                int nums = (int)pictureBox1.Width * pictureBox1.Height;
+                int i;
+                Bitmap bmp;
+
+                Color c;
+                Point p;
+
+                Bitmap orig = new(openFileDialog1.FileName);
+                bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+                bmp2 = new Bitmap(pictureBox1.Width, pictureBox1.Height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+
+                using (Graphics gr = Graphics.FromImage(bmp))
+                {
+                    gr.DrawImage(orig, new Rectangle(0, 0, bmp.Width, bmp.Height));
                 }
                 pictureBox1.Image = bmp;
-                progressBar1.Value = x;
-                pictureBox1.Refresh();
-                //pictureBox1.Refresh();
-            }
-            pictureBox1.Refresh();
-        }
 
-        private void button4_Click(object sender, EventArgs e)
-        {
-            int x, y;
-            Color c;
-            Bitmap bmp1;
-            progressBar1.Maximum = bmp.Width;
-            progressBar1.Value = 0;
-            bmp1 = new Bitmap(bmp.Width, bmp.Height);
-
-            for (x = 0; x < bmp.Width; x++)
-            {
-                for (y = 0; y < bmp.Height; y++)
+                m_array = Enumerable.Range(1, nums - 1).ToArray();
+                Random rnd = new();
+                m_array = m_array.OrderBy(c => rnd.Next()).ToArray();
+                vetor = new ArrayItem[m_array.Length];
+                vetor.Initialize();
+                progressBar1.Maximum = vetor.Length - 1;
+                progressBar1.Value = 0;
+                bmp = (Bitmap)pictureBox1.Image;
+                LockBitmap lockBitmap = new LockBitmap(bmp);
+                lockBitmap2 = new LockBitmap(bmp2);
+                lockBitmap.LockBits();
+                lockBitmap2.LockBits();
+                for (i = 0; i < vetor.Length; i++)
                 {
-                    c = bmp.GetPixel(x, y);
-                    c = Color.FromArgb(255 - c.R, 255 - c.G, 255 - c.B);
-                    bmp.SetPixel(x, y, c);
+                    p = idx2pt(m_array[i]);
+                    c = lockBitmap.GetPixel(p.X, p.Y);
+
+                    vetor[i] = new ArrayItem
+                    {
+                        Indice = i
+                    };
+
+                    vetor[i].Valor = m_array[i];
+                    vetor[i].Cor = c;
+                    p = idx2pt(i);
+                    lockBitmap2.SetPixel(p.X, p.Y, c);
+                    progressBar1.Value = i;
+                    //if (p.X >= pictureBox1.Width-1) pictureBox1.Image = bmp2;
                 }
-                pictureBox1.Image = bmp;
-                progressBar1.Value = x;
-                pictureBox1.Refresh();
+                //for (i = 0; i < vetor.Length; i++)
+                //{
+                    //EscritaEventHandler d1 = new EscritaEventHandler(OnEscreveu);
+                    //MudarEventHandler d2 = new MudarEventHandler(OnMudar);
+                    //vetor[i].Escreveu += d1;
+                    //vetor[i].Mudar += d2;
+                //}
+                lockBitmap.UnlockBits();
+                lockBitmap2.UnlockBits();
+                pictureBox1.Image = bmp2;
+
+                ArrayItem? zzz = vetor.Max();
             }
+
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void timer1_Tick(object sender, EventArgs e)
         {
-            string f = arq;
-            string[] p = f.Split('\\');
-            f = p[p.Length - 1];
-            p = f.Split('.');
-            f = p[0];
-            f += "_new.jpg";
-            pictureBox1.Image.Save(f, ImageFormat.Jpeg);
+            int i;
+            Color c;
+            Point p;
+
+            if (vetor != null)
+            {
+                lockBitmap2.LockBits();
+                for (i = 0; i < vetor.Length; i++)
+                {
+                    p = idx2pt(vetor[i].Indice);
+                    c = vetor[i].Cor;
+                    lockBitmap2.SetPixel(p.X, p.Y, c);
+                }
+                pictureBox1.Image = bmp2;
+                lockBitmap2.UnlockBits();
+            }
+            
         }
     }
 }

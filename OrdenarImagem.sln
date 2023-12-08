@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.2.32616.157
+VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrdenarImagem", "OrdenarImagem\OrdenarImagem.csproj", "{578A337D-A3E8-4663-88CB-49FFB6EF3EC8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrdenarImagem", "OrdenarImagem\OrdenarImagem.csproj", "{689BE414-E4D3-48A6-ACED-19995D1B3CDD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{578A337D-A3E8-4663-88CB-49FFB6EF3EC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{578A337D-A3E8-4663-88CB-49FFB6EF3EC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{578A337D-A3E8-4663-88CB-49FFB6EF3EC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{578A337D-A3E8-4663-88CB-49FFB6EF3EC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{689BE414-E4D3-48A6-ACED-19995D1B3CDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{689BE414-E4D3-48A6-ACED-19995D1B3CDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{689BE414-E4D3-48A6-ACED-19995D1B3CDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{689BE414-E4D3-48A6-ACED-19995D1B3CDD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {D69C2B9C-6032-4218-8D83-0A0702EA206A}
+		SolutionGuid = {13FE8EDA-9EDD-4B20-BB3C-6BE8AFDC3C66}
 	EndGlobalSection
 EndGlobal
